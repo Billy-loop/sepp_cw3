@@ -1,66 +1,72 @@
 package view;
 
+import model.*;
+
+import java.io.InputStream;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Scanner;
+
 public class TextUserInterface implements View {
 
+    private Scanner scanner;
+
+    public TextUserInterface(InputStream input){
+        this.scanner = new Scanner(input);
+    }
     @Override
-    public String getInput() {
-        return null;
+    public String getInput(String message) {
+        System.out.println(message);
+        return scanner.nextLine();
     }
 
     @Override
-    public boolean getYesNoInput() {
-        return true;
+    public boolean getYesNoInput(String info) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println(info);
+        String y = scanner.nextLine();
+        return y.equals("yes");
     }
 
     @Override
-    public void displayInfo() {
-
-    }
+    public void displayInfo(String info) {System.out.println(info);}
 
     @Override
-    public void displaySuccess() {
-
-    }
+    public void displaySuccess(String success) {System.out.println(success);}
 
     @Override
-    public void displayWarning() {
-
-    }
+    public void displayWarning(String warning) {System.out.println(warning);}
 
     @Override
-    public void displayError() {
-
-    }
+    public void displayError(String error) {System.out.println(error);}
 
     @Override
-    public void displayException() {
-
-    }
+    public void displayException(Exception e) {e.printStackTrace(System.out);}
 
     @Override
     public void displayDivider() {
+        System.out.println("---------------------------");
+    }
+
+    @Override
+    public void displayFAQ(FAQ faq, Boolean boo) {
 
     }
 
     @Override
-    public void displayFAQ() {
+    public void displayFAQSection(FAQSection section, Boolean boo) {
 
     }
 
     @Override
-    public void displayFAQSection() {
+    public void displayInquiry(Inquiry inquiry){
 
     }
 
     @Override
-    public void displayInquiry() {
-
+    public void displaySearchResults(Collection<PageSearchResult> res) {
+        for (PageSearchResult result: res){
+            System.out.println(result.getFormattedContent());
+        }
     }
-
-    @Override
-    public void displaySearchResults() {
-
-    }
-
-
 }
