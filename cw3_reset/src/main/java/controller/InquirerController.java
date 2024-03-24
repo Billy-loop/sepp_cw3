@@ -27,6 +27,18 @@ public class InquirerController extends Controller{
         while(currentSection != null && optNo != -1){
             if (currentSection == null){
                 FAQ faq = this.sharedContext.getFAQ();
+                this.view.displayFAQ(faq,currentUser instanceof Guest);
+                this.view.displayInfo("[-1] to return to main menu");
+
+            } else{
+                this.view.displayFAQSection(currentSection, currentUser instanceof Guest);
+                FAQSection parent = currentSection.getParent();
+                if(parent==null){
+                    this.view.displayInfo("[-1] to return to FAQ");
+                }else{
+                    String topic = parent.getTopic();
+                }
+
             }
         }
     }
