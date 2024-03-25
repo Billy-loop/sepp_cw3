@@ -118,7 +118,7 @@ public class AdminStaffController extends StaffController{
         this.view.displaySuccess("Successfully add faqItem");
     }
 
-    public void ViewAllPages(){
+    public void viewAllPages(){
 
 
     }
