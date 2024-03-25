@@ -23,22 +23,82 @@ public class InquirerController extends Controller{
         if(currentUser instanceof AuthenticatedUser){
             String userEmail = ((AuthenticatedUser) currentUser).getEmail();
         }
-        int optNo = 0;
-        while(currentSection != null && optNo != -1){
+        int optionNo = 0;
+        while(currentSection != null || optionNo != -1){
             if (currentSection == null){
                 FAQ faq = this.sharedContext.getFAQ();
+                //TODO displayFAQ()
                 this.view.displayFAQ(faq,currentUser instanceof Guest);
                 this.view.displayInfo("[-1] to return to main menu");
 
-            } else{
+            } else{//TODO displayFAQsection()
                 this.view.displayFAQSection(currentSection, currentUser instanceof Guest);
                 FAQSection parent = currentSection.getParent();
                 if(parent==null){
                     this.view.displayInfo("[-1] to return to FAQ");
                 }else{
                     String topic = parent.getTopic();
+                    this.view.displayInfo("[-1] to return to topic");
+                }
+                if(currentUser instanceof Guest){
+                    this.view.displayInfo("[-2] to request for this topic");
+                    this.view.displayInfo("[-3] to stop receiving update for this topic");
+                }else{
+                    String topic = currentSection.getTopic();
+                    Collection <String> subscribes = this.sharedContext.usersSubscribedToFAQTopic(topic);
+                    String subscribeEmail =  ((AuthenticatedUser) currentUser).getEmail();
+                    if(subscribes.contains(subscribeEmail)){
+                        this.view.displayInfo("[-2] to stop receiving updates for this topic");
+                    }else{
+                        this.view.displayInfo("[-2] to request to updates this topic");
+                    }
+                }
+            }
+            String option = this.view.getInput("Please choose an option");
+            try{
+                optionNo = Integer.parseInt(option);
+                String topic = currentSection.getTopic();//TODO getTOPIC()
+
+                if((currentSection != null) && (currentUser instanceof Guest) && (optionNo == -2)){
+                    this.requestFAQUpdates(null ,topic);
                 }
 
+                if((currentSection != null) && (currentUser instanceof Guest) && (optionNo == -3)){
+                    this.stopFAQUpdates(null, topic);
+                }
+
+                if((currentSection != null) && (optionNo == -2)){
+                    Collection <String> subscribes = this.sharedContext.usersSubscribedToFAQTopic(topic);
+                    String currentUserEmail =  ((AuthenticatedUser) currentUser).getEmail();
+                    if(subscribes.contains(currentUserEmail)){
+                        this.stopFAQUpdates(currentUserEmail,topic);
+                    }else{
+                        this.requestFAQUpdates(currentUserEmail,topic);
+                    }
+                }
+
+                if(currentSection != null && optionNo == -1){
+                    currentSection = currentSection.getParent();
+                }
+
+                if(optionNo != -1){
+                    ArrayList<FAQSection> sections = new ArrayList<FAQSection>();
+                    if(currentSection == null){
+                        FAQ faq = this.sharedContext.getFAQ();
+                        sections = faq.getFaqsection();
+                    }else{
+                        sections = currentSection.getSubsections();
+                    }
+                    int sectionLength = sections.size();
+                    if((optionNo<0) && ((optionNo >= sectionLength))){
+                        this.view.displayError("invalid option:" + option);
+                    }
+                    else{
+                        currentSection = sections.get(optionNo);
+                    }
+                }
+            }catch (NumberFormatException e){
+                this.view.displayError("Invalid option" + option);
             }
         }
     }
@@ -78,10 +138,24 @@ public class InquirerController extends Controller{
     }
 
     private void requestFAQUpdates(String email, String topic){
+        if(email == null){
+            email = this.view.getInput("Please enter your email address");
+        }
+        boolean success = this.sharedContext.registerForFAQUpdates(email, topic);
+        if (success){
+            this.view.displaySuccess("Successfully registered" + email + "for updates on" + topic);
+        }else{
+            this.view.displayInfo("Failed to register " + email + "for updates on" + topic + ",perhaps this email was already registered?");
+        }
+
 
     }
 
-    private void stopFAQUpdates(String a){
+    private void stopFAQUpdates(String email , String topic){
+        if(email == null){
+            email = this.view.getInput("Please enter your email address");
+        }
+        boolean success = this.sharedContext.unregisterForFAQUpdates(email, topic);
 
     }
 }
