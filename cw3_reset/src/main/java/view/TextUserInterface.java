@@ -49,12 +49,12 @@ public class TextUserInterface implements View {
     }
 
     @Override
-    public void displayFAQ(FAQ faq, Boolean boo) {
+    public void displayFAQ(FAQ faq, Boolean isGuest) {
 
     }
 
     @Override
-    public void displayFAQSection(FAQSection section, Boolean boo) {
+    public void displayFAQSection(FAQSection section, Boolean isGuest) {
 
     }
 
