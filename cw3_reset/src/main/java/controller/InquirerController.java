@@ -54,10 +54,19 @@ public class InquirerController extends Controller{
                     }
                 }
             }
-            String option = this.view.getInput("Please choose an option");
+
             // Processing option
-            try{
-                optionNo = Integer.parseInt(option);
+            while(true){
+                try{
+                    String option = this.view.getInput("Please choose an option");
+                    optionNo = Integer.parseInt(option);
+                    break;
+                }catch (NumberFormatException e){
+                    this.view.displayException(e);
+                    this.view.displayInfo("Please enter valid option or action");
+                }
+            }
+
                 String topic = currentSection.getTopic();
 
                 if((currentSection != null) && (currentUser instanceof Guest) && (optionNo == -2)){
@@ -112,21 +121,21 @@ public class InquirerController extends Controller{
                             sections = publicSections;
                         }
                     }
-
-                    int sectionLength = sections.size();
-                    if((optionNo<0) && (optionNo >= sectionLength)){
-                        this.view.displayError("invalid option:" + option);
+                    // Get valid option
+                    while(true){
+                        optionNo = Integer.parseInt(this.view.getInput("Please choose a topic"));
+                        if (optionNo>=0 && optionNo<= sections.size()){
+                            break;
+                        }else{
+                           this.view.displayError("invalid option:" + optionNo);
+                        }
                     }
-                    else{
-                        currentSection = sections.get(optionNo);
+
+                    currentSection = sections.get(optionNo);
                     }
                 }
-            }catch (NumberFormatException e){
-                this.view.displayError("Invalid option" + option);
-                this.consultFAQ();
-            }
         }
-    }
+
 
     public void searchPages(){
         String query = view.getInput("Enter your search query");
