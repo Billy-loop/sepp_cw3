@@ -10,7 +10,7 @@ import java.util.Collection;
 
 public class StaffController extends Controller {
     public StaffController(SharedContext sharedContext, View view, AuthenticationService authenticationService, EmailService emailService){
-
+        super(sharedContext, view, authenticationService, emailService);
     }
 
     protected Collection<String> getInquiryTitles(Collection<Inquiry> inquiries){

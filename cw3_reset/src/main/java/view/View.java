@@ -1,33 +1,40 @@
 package view;
-//import java.util.Collection;
+
+import model.FAQ;
+import model.FAQSection;
+import model.Inquiry;
+import model.PageSearchResult;
+
+import java.util.Collection;
 
 public interface View {
 
-    String getInput(String msg);
+    String getInput(String input);
 
 
-    boolean getYesNoInput();
+    boolean getYesNoInput(String input);
 
 
-    void displayInfo();
 
-    void displaySuccess();
+    void displayInfo(String info);
 
-    void displayWarning();
+    void displaySuccess(String success);
 
-    void displayError();
+    void displayWarning(String warning);
 
-    void displayException();
+    void displayError(String error);
+
+    void displayException(Exception e);
 
     void displayDivider();
 
-    void displayFAQ();
+    void displayFAQ(FAQ faq, Boolean boo);
 
-    void displayFAQSection();
+    void displayFAQSection(FAQSection section, Boolean boo);
 
-    void displayInquiry();
+    void displayInquiry(Inquiry inquiry);
 
-    void displaySearchResults();
+    void displaySearchResults(Collection<PageSearchResult>res);
 
 
 }
