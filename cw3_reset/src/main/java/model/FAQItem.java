@@ -7,4 +7,12 @@ public class FAQItem {
         this.question = question;
         this.answer = answer;
     }
+
+    public String getQuestion(){
+        return this.question;
+    }
+
+    public String getAnswer(){
+        return this.answer;
+    }
 }

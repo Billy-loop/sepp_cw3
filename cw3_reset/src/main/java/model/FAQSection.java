@@ -1,8 +1,14 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 public class FAQSection {
     private String topic;
     private boolean isPrivate;
+    private ArrayList<FAQSection> subsections;
+
+    private FAQSection parent;
 
     public FAQSection(String topic){
         this.topic = topic;
@@ -15,10 +21,14 @@ public class FAQSection {
     }
 
     public FAQSection getParent(){
-        return new FAQSection(this.topic);
+        return this.parent;
     }
 
     public String getTopic(){
         return this.topic;
+    }
+
+    public ArrayList<FAQSection> getSubsections(){
+        return this.subsections;
     }
 }

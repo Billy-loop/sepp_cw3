@@ -17,16 +17,18 @@ public class SharedContext {
         this.pages.add(page);
     }
 
-    public boolean registerForFAQUpdates(String s1, String s2){
-        return false;
+    public boolean registerForFAQUpdates(String email, String topic){
+        this.faqTopicsUpdateSubscribers.get(topic).add(email);
+        return true;
     }
 
-    public boolean unregisterForFAQUpdates(String s1, String s2){
-        return false;
+    public boolean unregisterForFAQUpdates(String email, String topic){
+        this.faqTopicsUpdateSubscribers.get(topic).remove(email);
+        return true;
     }
 
-    public Collection<String> usersSubscribedToFAQTopic(String s1){
-        return null;
+    public Collection<String> usersSubscribedToFAQTopic(String topic){
+        return this.faqTopicsUpdateSubscribers.get(topic);
     }
 
     public void setCurrentUser(User currnetUser){
