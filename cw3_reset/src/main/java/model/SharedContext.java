@@ -1,6 +1,8 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 public class SharedContext {
@@ -11,6 +13,10 @@ public class SharedContext {
     private FAQ faq;
 
     public SharedContext() {
+        this.faqTopicsUpdateSubscribers = new HashMap<String, Collection<String>>();
+        this.currentUser = new Guest();
+        this.pages = new ArrayList<Page>();
+        this.faq = new FAQ();
     }
 
     public void addPage(Page page){

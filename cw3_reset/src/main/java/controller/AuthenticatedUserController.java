@@ -2,6 +2,7 @@ package controller;
 
 import external.AuthenticationService;
 import external.EmailService;
+import model.Guest;
 import model.SharedContext;
 import view.View;
 
@@ -11,6 +12,6 @@ public class AuthenticatedUserController extends Controller{
     }
 
     public void logout(){
-
+        this.sharedContext.setCurrentUser(new Guest());
     }
 }
