@@ -1,10 +1,13 @@
 package view;
 
-public class TextUserInterface implements View {
+import java.util.Scanner;
 
+public class TextUserInterface implements View {
+    private Scanner input = new Scanner(Scanner.in);
     @Override
-    public String getInput() {
-        return null;
+    public String getInput(String msg) {
+        System.out.print(msg+" ");
+        return input.nextLine().trim();
     }
 
     @Override

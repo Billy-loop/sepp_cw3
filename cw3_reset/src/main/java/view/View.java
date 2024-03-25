@@ -1,14 +1,12 @@
 package view;
-
-import java.util.Collection;
+//import java.util.Collection;
 
 public interface View {
 
-    String getInput();
+    String getInput(String msg);
 
 
     boolean getYesNoInput();
-
 
 
     void displayInfo();
