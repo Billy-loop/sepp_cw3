@@ -25,13 +25,13 @@ public class InquirerController extends Controller{
         }
         int optionNo = 0;
         while(currentSection != null || optionNo != -1){
+            //Display the FAQ
             if (currentSection == null){
                 FAQ faq = this.sharedContext.getFAQ();
-                //TODO displayFAQ()
                 this.view.displayFAQ(faq,currentUser instanceof Guest);
                 this.view.displayInfo("[-1] to return to main menu");
 
-            } else{//TODO displayFAQsection()
+            } else{
                 this.view.displayFAQSection(currentSection, currentUser instanceof Guest);
                 FAQSection parent = currentSection.getParent();
                 if(parent==null){
@@ -55,9 +55,10 @@ public class InquirerController extends Controller{
                 }
             }
             String option = this.view.getInput("Please choose an option");
+            // Processing option
             try{
                 optionNo = Integer.parseInt(option);
-                String topic = currentSection.getTopic();//TODO getTOPIC()
+                String topic = currentSection.getTopic();
 
                 if((currentSection != null) && (currentUser instanceof Guest) && (optionNo == -2)){
                     this.requestFAQUpdates(null ,topic);
@@ -86,11 +87,34 @@ public class InquirerController extends Controller{
                     if(currentSection == null){
                         FAQ faq = this.sharedContext.getFAQ();
                         sections = faq.getFaqsection();
+                        //Get all public FAQsections
+                        ArrayList<FAQSection> publicSections = new ArrayList<>();
+                        for(FAQSection subSection : sections){
+                            boolean isPrivate = subSection.getPrivate();
+                            if(!isPrivate){
+                                publicSections.add(subSection);
+                            }
+                        }
+                        if (currentUser instanceof Guest){
+                            sections = publicSections;
+                        }
                     }else{
                         sections = currentSection.getSubsections();
+                        //Get all public FAQsections
+                        ArrayList<FAQSection> publicSections = new ArrayList<>();
+                        for(FAQSection subSection : sections){
+                            boolean isPrivate = subSection.getPrivate();
+                            if(!isPrivate){
+                                publicSections.add(subSection);
+                            }
+                        }
+                        if (currentUser instanceof Guest){
+                            sections = publicSections;
+                        }
                     }
+
                     int sectionLength = sections.size();
-                    if((optionNo<0) && ((optionNo >= sectionLength))){
+                    if((optionNo<0) && (optionNo >= sectionLength)){
                         this.view.displayError("invalid option:" + option);
                     }
                     else{
@@ -99,6 +123,7 @@ public class InquirerController extends Controller{
                 }
             }catch (NumberFormatException e){
                 this.view.displayError("Invalid option" + option);
+                this.consultFAQ();
             }
         }
     }

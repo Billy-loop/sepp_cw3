@@ -10,14 +10,24 @@ public class FAQSection {
 
     private FAQSection parent;
 
+    private ArrayList<FAQItem> items;
+
     public FAQSection(String topic){
         this.topic = topic;
+        this.isPrivate = true;
+        this.subsections = new ArrayList<>();
+        this.parent = null;
+        this.items = new ArrayList<>();
     }
     public void addSubsection(FAQSection section){
 
     }
     public void additem(String topic, String content){
 
+    }
+
+    public boolean getPrivate(){
+        return this.isPrivate;
     }
 
     public FAQSection getParent(){
@@ -30,5 +40,9 @@ public class FAQSection {
 
     public ArrayList<FAQSection> getSubsections(){
         return this.subsections;
+    }
+
+    public ArrayList<FAQItem> getItems(){
+        return this.items;
     }
 }
