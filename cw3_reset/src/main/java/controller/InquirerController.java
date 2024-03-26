@@ -19,7 +19,7 @@ public class InquirerController extends Controller{
 
     public void consultFAQ(){
         FAQSection currentSection = null;
-        User currentUser =this.sharedContext.getCurrentUser();
+        User currentUser = this.sharedContext.getCurrentUser();
         if(currentUser instanceof AuthenticatedUser){
             String userEmail = ((AuthenticatedUser) currentUser).getEmail();
         }

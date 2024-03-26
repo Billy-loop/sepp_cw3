@@ -11,4 +11,8 @@ public class FAQ {
     public ArrayList<FAQSection> getFaqsection(){
         return this.faqsections;
     }
+
+    public void addSubsection(FAQSection section){
+        faqsections.add(section);
+    }
 }

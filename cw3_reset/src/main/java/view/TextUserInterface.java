@@ -11,18 +11,17 @@ public class TextUserInterface implements View {
 
     private Scanner scanner;
 
-    public TextUserInterface(InputStream input){
-        this.scanner = new Scanner(input);
+    public TextUserInterface(){
+        this.scanner = new Scanner(System.in);
     }
     @Override
     public String getInput(String message) {
-        System.out.println(message);
-        return scanner.nextLine();
+        System.out.print(message + " ");
+        return scanner.nextLine().trim();
     }
 
     @Override
     public boolean getYesNoInput(String info) {
-        Scanner scanner = new Scanner(System.in);
         System.out.println(info);
         String y = scanner.nextLine();
         return y.equals("yes");
