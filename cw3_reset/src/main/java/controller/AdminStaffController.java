@@ -2,6 +2,7 @@ package controller;
 
 import external.AuthenticationService;
 import external.EmailService;
+import external.MockEmailService;
 import model.*;
 import view.View;
 
@@ -143,6 +144,11 @@ public class AdminStaffController extends StaffController{
     }
 
     public void redirectInquiry(Inquiry inquiry){
-        inquiry.setAssignedTo();
+        String reciver = "";
+        inquiry.setAssignedTo(reciver);
+
+        String subject = "Redirected Inquiry",
+                content = "Inquiry from " + inquiry.getInquirerEmail() + " has been redirected to you.";
+        emailService.sendEmail(SharedContext.ADMIN_STAFF_EMAIL, reciver, subject, content);
     }
 }
