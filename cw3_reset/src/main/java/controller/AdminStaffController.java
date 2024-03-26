@@ -16,10 +16,10 @@ public class AdminStaffController extends StaffController{
     }
 
     public void addPage(){
-        String title =view.getInput("Enter page title");
-        String content = view.getInput("Enter page content");
-        boolean isPrivate = view.getYesNoInput("Should this page be private");
-        Collection<Page> availablePages = sharedContext.getPages();
+        String title =this.view.getInput("Enter page title");
+        String content = this.view.getInput("Enter page content");
+        boolean isPrivate = this.view.getYesNoInput("Should this page be private");
+        Collection<Page> availablePages = this.sharedContext.getPages();
         //Find the exist Title.
         ArrayList <String> titles = new ArrayList<String>();
         for (Page page: availablePages){
@@ -39,7 +39,7 @@ public class AdminStaffController extends StaffController{
         String currentUserEmail = currentUser.getEmail();
 
         int status = emailService.sendEmail(currentUserEmail, SharedContext.ADMIN_STAFF_EMAIL,title, content);
-        if (status == STATUS_SUCCESS){
+        if (status == EmailService.STATUS_SUCCESS){
             view.displaySuccess("Added page" + title);
         }
         else {
@@ -54,12 +54,27 @@ public class AdminStaffController extends StaffController{
             this.view.displayInfo("[-1] return MENU");
             this.view.displayInfo("[-2] Add new topic");
             int op = Integer.parseInt(this.view.getInput("Choose a topic or action"));
-            if (op == -1){
-                return;
+            while(op== -1 || op == -2){
+                if (op == -1){
+                    return;
+                }
+                if (op == -2){
+                    FAQSection currentSection = new FAQSection(this.view.getInput("Create a new topic"));
+                    faq.getFaqsection().add(currentSection);
+                }
+                this.view.displayFAQ(faq,false);
+                this.view.displayInfo("[-1] return MENU");
+                this.view.displayInfo("[-2] Add new topic");
+                op = Integer.parseInt(this.view.getInput("Choose a topic or action"));
             }
-            if (op == -2){
-                FAQSection currentSection = new FAQSection(this.view.getInput("Create a new topic"));
-                faq.getFaqsection().add(currentSection);
+
+            while(true){
+//                op = Integer.parseInt(this.view.getInput("Please choose a topic"));
+                if (op>=0 && op<= faq.getFaqsection().size()){
+                    break;
+                }else{
+                    this.view.displayError("invalid option:" + op);
+                }
             }
             FAQSection currnetSection = faq.getFaqsection().get(op);
             this.view.displayFAQSection(currnetSection,false);
@@ -99,12 +114,12 @@ public class AdminStaffController extends StaffController{
                         this.emailService.sendEmail(SharedContext.ADMIN_STAFF_EMAIL, subscriber, subject, content);
                     }
                 }
-            }
-            try{
-                currnetSection = currnetSection.getSubsections().get(op);
-                this.view.displayInfo("Sub topic");
-            }catch(IndexOutOfBoundsException e){
-                this.view.displayInfo("Try again with a valid index");
+                try{
+                    currnetSection = currnetSection.getSubsections().get(op);
+                    this.view.displayInfo("Sub topic");
+                }catch(IndexOutOfBoundsException e){
+                    this.view.displayInfo("Try again with a valid index");
+                }
             }
         }
     }

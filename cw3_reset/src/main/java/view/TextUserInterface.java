@@ -66,6 +66,7 @@ public class TextUserInterface implements View {
 
     @Override
     public void displayFAQSection(FAQSection section, Boolean isGuest) {
+        this.displayDivider();
         System.out.println("Topic: " + section.getTopic());
         int index = 0;
         for(FAQSection subSection : section.getSubsections()){
@@ -80,6 +81,7 @@ public class TextUserInterface implements View {
         for(FAQItem faqItem : section.getItems()){
             System.out.println("--Q: " + faqItem.getQuestion() + "-A:" + faqItem.getAnswer());
         }
+        this.displayDivider();
 
 
     }

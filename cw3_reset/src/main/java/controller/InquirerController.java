@@ -138,7 +138,7 @@ public class InquirerController extends Controller{
 
 
     public void searchPages(){
-        String query = view.getInput("Enter your search query");
+        String query = this.view.getInput("Enter your search query");
         Collection<Page> availablePages = this.sharedContext.getPages();
         User currentUser = sharedContext.getCurrentUser();
         if(currentUser instanceof Guest){

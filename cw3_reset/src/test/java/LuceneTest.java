@@ -28,7 +28,6 @@ public class LuceneTest {
     @Test
     public void testCore() throws IOException, ParseException {
         Analyzer analyzer = new StandardAnalyzer();
-
         Path indexPath = Files.createTempDirectory("tempIndex");
         Directory directory = FSDirectory.open(indexPath);
         IndexWriterConfig config = new IndexWriterConfig(analyzer);
