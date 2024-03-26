@@ -46,6 +46,7 @@ public class PageSearch {
         writer.addDocument(doc);
     }
     public Collection<PageSearchResult> search(String question) throws IOException, ParseException {
+        //Search the index
         DirectoryReader ireader = DirectoryReader.open(this.index);
         IndexSearcher isearcher = new IndexSearcher(ireader);
 

@@ -9,5 +9,6 @@ public class Main {
         String x = input.next();
 
         System.out.println(x);
+
     }
 }

@@ -20,8 +20,7 @@ public class Controller {
         this.emailService = emailService;
     }
 
-    protected <T> int selectFromMenu(Collection<T> options, String instruction){
-
+    protected <T extends Enum<T>> int selectFromMenu(Collection<T> options, String instruction){
         int index = 0;
         for (T option : options){
             this.view.displayInfo("[" + index +"]" + option);
