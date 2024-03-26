@@ -136,7 +136,6 @@ public class AdminStaffController extends StaffController{
 
     public void viewAllPages(){
 
-
     }
 
     public void manageInquiries(){
@@ -144,7 +143,7 @@ public class AdminStaffController extends StaffController{
     }
 
     public void redirectInquiry(Inquiry inquiry){
-        String reciver = "";
+        String reciver = ""; //Need to figure out
         inquiry.setAssignedTo(reciver);
 
         String subject = "Redirected Inquiry",

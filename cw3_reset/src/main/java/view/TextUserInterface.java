@@ -34,13 +34,20 @@ public class TextUserInterface implements View {
     public void displaySuccess(String success) {System.out.println(success);}
 
     @Override
-    public void displayWarning(String warning) {System.out.println(warning);}
+    public void displayWarning(String warning) {
+        System.out.println("== WARNING ==");
+        System.out.println(warning);
+    }
 
     @Override
-    public void displayError(String error) {System.out.println(error);}
+    public void displayError(String error) {
+        System.out.println("== ERROR ==");
+        System.out.println(error);
+    }
 
     @Override
-    public void displayException(Exception e) {e.printStackTrace(System.out);}
+    public void displayException(Exception e) {
+        e.printStackTrace(System.out);}
 
     @Override
     public void displayDivider() {
@@ -87,7 +94,15 @@ public class TextUserInterface implements View {
 
     @Override
     public void displayInquiry(Inquiry inquiry){
+        this.displayDivider();
 
+        System.out.println("CREATED AT: " + inquiry.getCreatedAt());
+        System.out.println("SENDER: " + inquiry.getInquirerEmail());
+        System.out.println("RECEIVER: " + inquiry.getAssignedTo());
+        System.out.println("SUBJECT: " + inquiry.getSubject());
+        System.out.println("CONTENT: " + inquiry.getContent());
+
+        this.displayDivider();
     }
 
     @Override
