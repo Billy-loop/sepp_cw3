@@ -47,11 +47,13 @@ public class TextUserInterface implements View {
 
     @Override
     public void displayException(Exception e) {
-        e.printStackTrace(System.out);}
+        System.out.println("EXCEPTION OCCURRED: ");
+        System.out.println(e.getMessage());
+    }
 
     @Override
     public void displayDivider() {
-        System.out.println("---------------------------");
+        System.out.println("---------------------------------");
     }
 
     @Override
