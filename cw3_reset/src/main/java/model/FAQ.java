@@ -1,14 +1,18 @@
 package model;
 
-import java.util.ArrayList;
+import java.util.Map;
+
 
 public class FAQ {
-    private ArrayList<FAQSection> faqsections;
-
+    /**
+     * @param pair Question-Answer pair
+     * */
+    private FAQSection faqSection;
     public FAQ(){
-        this.faqsections = new ArrayList<>();
+        this.faqSection = new FAQSection();
     }
-    public ArrayList<FAQSection> getFaqsection(){
-        return this.faqsections;
+
+    public FAQSection getfaqSection(){
+        return this.faqSection;
     }
 }

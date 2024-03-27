@@ -7,12 +7,15 @@ public class FAQItem {
         this.question = question;
         this.answer = answer;
     }
-
-    public String getQuestion(){
-        return this.question;
+    public void setAnswer(String newAnswer){
+        this.answer = newAnswer;
     }
 
     public String getAnswer(){
         return this.answer;
     }
+    public String getQuestion(){
+        return this.question;
+    }
+
 }
