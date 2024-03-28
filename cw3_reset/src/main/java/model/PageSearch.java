@@ -36,7 +36,7 @@ public class PageSearch {
         IndexWriter iwriter = new IndexWriter(this.index, config);
         for (Page page: pages){
             this.addDoc(iwriter, page.getTitle(), page.getContent());
-        }
+        }iwriter.close();
     }
 
     public void addDoc(IndexWriter writer, String title, String content) throws IOException {

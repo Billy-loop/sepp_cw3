@@ -36,5 +36,7 @@ public interface View {
 
     void displaySearchResults(Collection<PageSearchResult>res);
 
+    void displayFailure(String fail);
+
 
 }

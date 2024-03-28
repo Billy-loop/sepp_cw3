@@ -34,7 +34,7 @@ public class MenuController extends Controller{
                 }
             }
         }else{
-//            System.out.println( "Role:"+  ((AuthenticatedUser)this.sharedContext.getCurrentUser()).getRole());
+            System.out.println( "Role:"+  ((AuthenticatedUser)this.sharedContext.getCurrentUser()).getRole());
             switch( ((AuthenticatedUser)this.sharedContext.getCurrentUser()).getRole() ){
                 case "TeachingStaff":
                     handleTeachingStaffMainMenu();
@@ -56,7 +56,7 @@ public class MenuController extends Controller{
         GuestController guest = new GuestController(this.sharedContext, this.view, this.authenticationService, this.emailService);
         InquirerController inquirer = new InquirerController(this.sharedContext, this.view, this.authenticationService, this.emailService);
         this.view.displayInfo("Guest");
-        int option = guest.selectFromMenu(EnumSet.allOf(GuestMainMenuOption.class), "Return to welcome page");
+        int option = guest.selectFromMenu(EnumSet.allOf(GuestMainMenuOption.class), "[-1] Return to welcome page");
         if (option == GuestMainMenuOption.LOGIN.value){
             guest.login();
             return !(guest.sharedContext.getCurrentUser() instanceof Guest);
@@ -77,7 +77,7 @@ public class MenuController extends Controller{
         InquirerController inquirer = new InquirerController(this.sharedContext, this.view, this.authenticationService, this.emailService);
         AuthenticatedUserController student = new AuthenticatedUserController(this.sharedContext, this.view, this.authenticationService, this.emailService);
         this.view.displayInfo("Student");
-        int option = student.selectFromMenu(EnumSet.allOf(StudentMainMenuOption.class), "Return to welcome page");
+        int option = student.selectFromMenu(EnumSet.allOf(StudentMainMenuOption.class), "[-1] Return to welcome page");
         if(option == StudentMainMenuOption.LOGOUT.value){
             student.logout();
             if(this.sharedContext.getCurrentUser() instanceof Guest){
@@ -103,7 +103,7 @@ public class MenuController extends Controller{
         TeachingStaffController teacher = new TeachingStaffController(this.sharedContext,this.view,this.authenticationService,this.emailService);
         AuthenticatedUserController teacherUser = new AuthenticatedUserController(this.sharedContext,this.view,this.authenticationService,this.emailService);
         this.view.displayInfo("TeachingStaff");
-        int option = teacherUser.selectFromMenu(EnumSet.allOf(TeachingStaffMainMenuOption.class),"Return to welcome page");
+        int option = teacher.selectFromMenu(EnumSet.allOf(TeachingStaffMainMenuOption.class), "[-1] Return to welcome page");
         if(option == TeachingStaffMainMenuOption.LOGOUT.value){
             teacherUser.logout();
             if(this.sharedContext.getCurrentUser() instanceof Guest){
@@ -127,7 +127,8 @@ public class MenuController extends Controller{
         AuthenticatedUserController adminStaffUser = new AuthenticatedUserController(this.sharedContext,this.view,this.authenticationService,this.emailService);
         AdminStaffController adminstaff = new AdminStaffController(this.sharedContext,this.view,this.authenticationService,this.emailService);
         this.view.displayInfo("Adminstaff");
-        int option = adminStaffUser.selectFromMenu(EnumSet.allOf(AdminStaffMainMenuOption.class),"Return to welcome page");
+        int option = adminstaff.selectFromMenu(EnumSet.allOf(AdminStaffMainMenuOption.class), "[-1] Return to welcome page");
+
         if(option == AdminStaffMainMenuOption.LOGOUT.value){
             adminStaffUser.logout();
             if(this.sharedContext.getCurrentUser() instanceof Guest){
@@ -139,12 +140,14 @@ public class MenuController extends Controller{
             adminstaff.addPage();
         }
         else if(option == AdminStaffMainMenuOption.MANAGE_FAQ.value){
-            System.out.println("?");
             adminstaff.manageFAQ();
         }
         else if(option == AdminStaffMainMenuOption.MANAGE_QUERIES.value){
             adminstaff.manageInquiries();
-        }else{
+        } else if (option == AdminStaffMainMenuOption.SEE_ALL_PAGES.value) {
+            adminstaff.viewAllPages();
+
+        } else{
             this.view.displayError("Bad number");
 //            throw new IllegalArgumentException();
         }

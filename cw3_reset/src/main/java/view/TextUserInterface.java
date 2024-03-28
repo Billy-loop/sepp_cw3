@@ -22,10 +22,11 @@ public class TextUserInterface implements View {
 
     @Override
     public boolean getYesNoInput(String info) {
-        Scanner scanner = new Scanner(System.in);
+//        Scanner scanner = new Scanner(System.in);
         System.out.println(info);
         String y = scanner.nextLine();
-        return y.equals("yes");
+        String processedInput = y.toLowerCase().trim();
+        return processedInput.equals("y") || processedInput.equals("yes") || processedInput.equals("Yes") || processedInput.equals("Y");
     }
 
     @Override
@@ -50,40 +51,33 @@ public class TextUserInterface implements View {
 
     @Override
     public void displayFAQ(FAQ faq, Boolean isGuest) {
-        this.displayDivider();
-        System.out.println("FAQ:");
-        int index = 0;
-        for(FAQSection section : faq.getFaqsection()){
-            if (isGuest && section.getPrivate()){
-                continue;
-            }else{
-                System.out.println("-Subtopic " + index + ":" + section.getTopic());
-                index ++;
-            }
+        this.displayInfo("FAQ");
+        if(faq != null){
+            displayFAQSection(faq.getfaqSection(), false);
         }
-        this.displayDivider();
     }
 
     @Override
-    public void displayFAQSection(FAQSection section, Boolean isGuest) {
-        this.displayDivider();
-        System.out.println("Topic: " + section.getTopic());
+    public void displayFAQSection(FAQSection faqSection, Boolean includeQuestions) {
+        System.out.println("Topic: " + (faqSection.getTopic()==null?"root":faqSection.getTopic()));
+//        System.out.println(faqSection.getSuperTopics());
+        if(faqSection.getTopic()!=null){
+            System.out.print("SuperTopics ");
+            for(String superTopic : faqSection.getSuperTopics()){
+                System.out.print(superTopic + " ");
+            }
+            System.out.println();
+        }
         int index = 0;
-        for(FAQSection subSection : section.getSubsections()){
-            boolean isPrivate = subSection.getPrivate();
-            if(isGuest && isPrivate){
-                continue;
-            }else{
-                System.out.println("-Subtopic " + index + ":" + subSection.getTopic());
-                index ++;
+        for(FAQSection subSection : faqSection.getSubSections()){
+            System.out.println("-Subtopic [" + index + "]:" + subSection.getTopic());
+            index ++;
+        }
+        if(includeQuestions){
+            for(FAQItem faqItem : faqSection.getItems()){
+                System.out.println("--Q: " + faqItem.getQuestion() + "-A:" + faqItem.getAnswer());
             }
         }
-        for(FAQItem faqItem : section.getItems()){
-            System.out.println("--Q: " + faqItem.getQuestion() + "-A:" + faqItem.getAnswer());
-        }
-        this.displayDivider();
-
-
     }
 
     @Override
@@ -93,8 +87,12 @@ public class TextUserInterface implements View {
 
     @Override
     public void displaySearchResults(Collection<PageSearchResult> res) {
+        System.out.println("Search Results:");
         for (PageSearchResult result: res){
             System.out.println(result.getFormattedContent());
         }
     }
+
+    @Override
+    public void displayFailure(String fail){System.out.println(fail);}
 }
