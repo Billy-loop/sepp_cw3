@@ -2,14 +2,12 @@ package view;
 
 import model.*;
 
-import java.io.InputStream;
 import java.util.Collection;
-import java.util.Map;
 import java.util.Scanner;
 
 public class TextUserInterface implements View {
 
-    private Scanner scanner;
+    private final Scanner scanner;
 
     public TextUserInterface(){
         this.scanner = new Scanner(System.in);
@@ -23,7 +21,7 @@ public class TextUserInterface implements View {
     @Override
     public boolean getYesNoInput(String info) {
         System.out.println(info);
-        String y = scanner.nextLine();
+        String y = scanner.nextLine().trim();
         return y.equals("yes");
     }
 
