@@ -184,13 +184,11 @@ public class InquirerController extends Controller{
         String email, subject, content;
         if(this.sharedContext.getCurrentUser() instanceof Guest){//Guest
             email = this.view.getInput("Your Email:");
-            subject = this.view.getInput("Subject:");
-            content = this.view.getInput("Content:");
         }else{
             email = ((AuthenticatedUser)this.sharedContext.getCurrentUser()).getEmail();
-            subject = this.view.getInput("Subject:");
-            content = this.view.getInput("Content:");
         }
+        subject = this.view.getInput("Subject:");
+        content = this.view.getInput("Content:");
         this.sharedContext.getInquiries().add(new Inquiry(subject, content, email));// Add into inquiries.
         this.emailService.sendEmail(email, SharedContext.ADMIN_STAFF_EMAIL, subject, content);
     }
