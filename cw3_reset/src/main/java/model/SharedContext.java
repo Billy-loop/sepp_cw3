@@ -40,7 +40,6 @@ public class SharedContext {
     }
 
     public boolean unregisterForFAQUpdates(String email, String topic){
-        // TODO this might have exceptions...
         return this.faqTopicsUpdateSubscribers.get(topic).remove(email);
     }
 
@@ -57,27 +56,14 @@ public class SharedContext {
     public Collection<Page> getPages(){
         return this.pages;
     }
-    public boolean pageExist(String title){
-        for(Page y : this.pages){
-            if(title.equals(y.getTitle())){
-                return true;
-            }
-        }
-        return false;
-    }
+
     public FAQ getFAQ() {
         return this.faq;
     }
-    public Collection<Inquiry> getUnAnsweredInquires(){
-        ArrayList<Inquiry> toReturn = new ArrayList<>();
-//        System.out.println(this.inquiries.size());
-        for(Inquiry inquiry:this.inquiries){
-//            System.out.println(inquiry.getSubject()+"  " + inquiry.getAssignedTo());
-            if(inquiry.getAssignedTo() == null){
-                toReturn.add(inquiry);
-            }
-        }
-        return toReturn;
+
+
+    public Collection<Inquiry> getInquiries(){
+        return this.inquiries;
     }
 
     public Map<String, Collection<String>> getFaqTopicsUpdateSubscribers() {

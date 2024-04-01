@@ -14,10 +14,15 @@ public class MenuController extends Controller{
     public MenuController(SharedContext sharedContext, View view, AuthenticationService authenticationService, EmailService emailService){
         super(sharedContext,view,authenticationService,emailService);
     }
+/*
+ *
+ */
 
     public void mainMenu(){
-        this.view.displayInfo("Welcome");
+//        this.view.displayInfo("Welcome");
+//        this.view.displayDivider();
         if(this.sharedContext.getCurrentUser() instanceof Guest){
+            this.view.displayInfo("Welcome");
             if(handleGuestMainMenu()){ // login success
                 switch( ((AuthenticatedUser)this.sharedContext.getCurrentUser()).getRole() ){
                     case "TeachingStaff":
@@ -34,7 +39,7 @@ public class MenuController extends Controller{
                 }
             }
         }else{
-            System.out.println( "Role:"+  ((AuthenticatedUser)this.sharedContext.getCurrentUser()).getRole());
+//            System.out.println( "Role:"+  ((AuthenticatedUser)this.sharedContext.getCurrentUser()).getRole());
             switch( ((AuthenticatedUser)this.sharedContext.getCurrentUser()).getRole() ){
                 case "TeachingStaff":
                     handleTeachingStaffMainMenu();
@@ -55,8 +60,11 @@ public class MenuController extends Controller{
     private boolean handleGuestMainMenu(){
         GuestController guest = new GuestController(this.sharedContext, this.view, this.authenticationService, this.emailService);
         InquirerController inquirer = new InquirerController(this.sharedContext, this.view, this.authenticationService, this.emailService);
+        this.view.displayDivider();
         this.view.displayInfo("Guest");
-        int option = guest.selectFromMenu(EnumSet.allOf(GuestMainMenuOption.class), "[-1] Return to welcome page");
+        this.view.displayDivider();
+
+        int option = guest.selectFromMenu(EnumSet.allOf(GuestMainMenuOption.class), "Please choose an option");
         if (option == GuestMainMenuOption.LOGIN.value){
             guest.login();
             return !(guest.sharedContext.getCurrentUser() instanceof Guest);
@@ -68,7 +76,8 @@ public class MenuController extends Controller{
         } else if (option == GuestMainMenuOption.CONTACT_STAFF.value) {
             inquirer.contactStaff();
         }else{
-            this.view.displayError("Bad number");
+            this.view.displayError("Bad number, please choose a correct option");
+//            this.view.displayDivider();
         }
         return false;
     }
@@ -76,8 +85,12 @@ public class MenuController extends Controller{
     private boolean handleStudentMainMenu() {
         InquirerController inquirer = new InquirerController(this.sharedContext, this.view, this.authenticationService, this.emailService);
         AuthenticatedUserController student = new AuthenticatedUserController(this.sharedContext, this.view, this.authenticationService, this.emailService);
+
+        this.view.displayDivider();
         this.view.displayInfo("Student");
-        int option = student.selectFromMenu(EnumSet.allOf(StudentMainMenuOption.class), "[-1] Return to welcome page");
+        this.view.displayDivider();
+
+        int option = student.selectFromMenu(EnumSet.allOf(StudentMainMenuOption.class), "Please choose an option");
         if(option == StudentMainMenuOption.LOGOUT.value){
             student.logout();
             if(this.sharedContext.getCurrentUser() instanceof Guest){
@@ -94,7 +107,8 @@ public class MenuController extends Controller{
         else if(option == StudentMainMenuOption.SEARCH_PAGES.value){
             inquirer.searchPages();
         }else{
-            this.view.displayError("Bad number");
+            this.view.displayError("Bad number, please choose a correct option");
+//            this.view.displayDivider();
             //throw new IllegalArgumentException();
         }
         return false;
@@ -102,8 +116,11 @@ public class MenuController extends Controller{
     private boolean handleTeachingStaffMainMenu(){
         TeachingStaffController teacher = new TeachingStaffController(this.sharedContext,this.view,this.authenticationService,this.emailService);
         AuthenticatedUserController teacherUser = new AuthenticatedUserController(this.sharedContext,this.view,this.authenticationService,this.emailService);
+        this.view.displayDivider();
         this.view.displayInfo("TeachingStaff");
-        int option = teacher.selectFromMenu(EnumSet.allOf(TeachingStaffMainMenuOption.class), "[-1] Return to welcome page");
+        this.view.displayDivider();
+
+        int option = teacher.selectFromMenu(EnumSet.allOf(TeachingStaffMainMenuOption.class), "Please choose an option");
         if(option == TeachingStaffMainMenuOption.LOGOUT.value){
             teacherUser.logout();
             if(this.sharedContext.getCurrentUser() instanceof Guest){
@@ -117,7 +134,8 @@ public class MenuController extends Controller{
             return true;
         }
         else{
-            this.view.displayError("Bad number");
+            this.view.displayError("Bad number, please choose a correct option");
+//            this.view.displayDivider();
 //           throw new IllegalArgumentException();
         }
         return false;
@@ -126,8 +144,12 @@ public class MenuController extends Controller{
     private boolean handleAdminStaffMainMenu(){
         AuthenticatedUserController adminStaffUser = new AuthenticatedUserController(this.sharedContext,this.view,this.authenticationService,this.emailService);
         AdminStaffController adminstaff = new AdminStaffController(this.sharedContext,this.view,this.authenticationService,this.emailService);
+
+        this.view.displayDivider();
         this.view.displayInfo("Adminstaff");
-        int option = adminstaff.selectFromMenu(EnumSet.allOf(AdminStaffMainMenuOption.class), "[-1] Return to welcome page");
+        this.view.displayDivider();
+
+        int option = adminstaff.selectFromMenu(EnumSet.allOf(AdminStaffMainMenuOption.class), "Please choose an option");
 
         if(option == AdminStaffMainMenuOption.LOGOUT.value){
             adminStaffUser.logout();
@@ -148,7 +170,8 @@ public class MenuController extends Controller{
             adminstaff.viewAllPages();
 
         } else{
-            this.view.displayError("Bad number");
+            this.view.displayError("Bad number, please choose a correct option");
+//            this.view.displayDivider();
 //            throw new IllegalArgumentException();
         }
         return false;

@@ -47,7 +47,9 @@ public class AdminStaffController extends StaffController{
                 view.displayInfo("Cancelled adding new page");
                 return;
             }
+            availablePages.removeIf(y -> title.equals(y.getTitle()));
         }
+        //add new page
         Page newPage = new Page(title,content,isPrivate);
         this.sharedContext.addPage(newPage);
         AuthenticatedUser currentUser = (AuthenticatedUser) this.sharedContext.getCurrentUser();
@@ -61,16 +63,20 @@ public class AdminStaffController extends StaffController{
             view.displayWarning("Added page" + title + "but failed to send email notification");
         }
     }
+/**
+ *
+ */
 
     public void manageFAQ(){
         FAQSection currentFAQSection = this.sharedContext.getFAQ().getfaqSection();
 
         while(true){
             this.view.displayFAQSection(currentFAQSection, true);
-            this.view.displayInfo("-1 to Return");
-            this.view.displayInfo("-2 to add Q-A pair");
-            int op = Integer.parseInt(this.view.getInput("Navigate?"));
-            if(op == -1){ // return to privous layer / cancel
+            this.view.displayInfo("[-1] to Return");
+            this.view.displayInfo("[-2] to add Q-A pair");
+//            int op = Integer.parseInt(this.view.getInput("Navigate?"));
+            int op = Integer.parseInt(this.view.getInput("Choose an option?"));
+            if(op == -1){ // return to previous layer / cancel
                 if(currentFAQSection.getParent() != null){
                     currentFAQSection = currentFAQSection.getParent();
                     this.view.displayInfo("Parent topic");
@@ -78,16 +84,25 @@ public class AdminStaffController extends StaffController{
                     this.view.displayInfo("You are at the top layer, return to menu");
                     return;
                 }
-            }
-            if(op == -2){ // Add Q-A
+            } else if (op == -2) {// Add Q-A
                 addFAQItem(currentFAQSection);
+            }else{
+                try{
+                    currentFAQSection = currentFAQSection.getSubSections().get(op);
+//                    this.view.displayInfo("Sub topic");
+                }catch(IndexOutOfBoundsException e){
+                    this.view.displayInfo("Try again with a valid index");
+                }
             }
-            try{
-                currentFAQSection = currentFAQSection.getSubSections().get(op);
-                this.view.displayInfo("Sub topic");
-            }catch(IndexOutOfBoundsException e){
-                this.view.displayInfo("Try again with a valid index");
-            }
+//            if(op == -2){ // Add Q-A
+//                addFAQItem(currentFAQSection);
+//            }
+//            try{
+//                currentFAQSection = currentFAQSection.getSubSections().get(op);
+//                this.view.displayInfo("Sub topic");
+//            }catch(IndexOutOfBoundsException e){
+//                this.view.displayInfo("Try again with a valid index");
+//            }
         }
     }
 
@@ -99,16 +114,16 @@ public class AdminStaffController extends StaffController{
 
         // ask for topic
         if(faqSection.getTopic() != null){ // not root
-            boolean isNewTopic = this.view.getYesNoInput("Added at a new subTopic?");
+            boolean isNewTopic = this.view.getYesNoInput("Added at a new subTopic? Please enter yes or no");
             if(isNewTopic){
                 String topic = this.view.getInput("new Subtopic name:");
                 emailtopic = topic;
                 FAQSection toAddSec;
-                if(!faqSection.getAllSubTopics().contains(topic)){
+                if(!faqSection.getAllSubTopics().contains(topic)){//Do not exist
                     toAddSec = new FAQSection(topic);
                     toAddSec.addItem(toAddQA);
                     faqSection.addSubsection(toAddSec);
-                }else{
+                }else{//Exist
                     this.view.displayWarning("Topic already exist, inserting to old one.");
                     toAddSec = faqSection.getSubSectionWithTopic(topic);
                     toAddSec.addItem(toAddQA);
@@ -120,11 +135,11 @@ public class AdminStaffController extends StaffController{
             String topic = this.view.getInput("new Subtopic name:");
             emailtopic = topic;
             FAQSection toAddSec;
-            if(!faqSection.getAllSubTopics().contains(topic)){
+            if(!faqSection.getAllSubTopics().contains(topic)){//Topic does not exist
                 toAddSec = new FAQSection(topic);
                 toAddSec.addItem(toAddQA);
                 faqSection.addSubsection(toAddSec);
-            }else{
+            }else{//exist
                 this.view.displayWarning("Topic already exist, inserting to old one.");
                 toAddSec = faqSection.getSubSectionWithTopic(topic);
                 toAddSec.addItem(toAddQA);
@@ -152,11 +167,49 @@ public class AdminStaffController extends StaffController{
         }
     }
 
+    /**
+     * Display option,
+     *
+     *
+     * @return the sum of {@code a} and {@code b}
+     */
     public void manageInquiries(){
+        this.view.displayInfo("Unanswered Inquires:");
+        int index = 0;
+        for(String title : this.getInquiryTitles(this.sharedContext.getInquiries())){
+            this.view.displayInfo("[" +Integer.toString(index) + "]" + ": "+title);
+            index ++;
+        }
+        this.view.displayInfo("[-1] to Return");
+        int op = Integer.parseInt(this.view.getInput("Choose:"));
+        if(op != -1){ // return
+            try{//Choose inquiry to change
+                Inquiry toChange = ((ArrayList<Inquiry>) this.sharedContext.getInquiries()).get(op);
+                this.view.displayInfo("Subject:"+toChange.getSubject()+"\nContent:"+toChange.getContent());
+                //
+                op = Integer.parseInt(this.view.getInput("[0] Answer yourself\n[1] Redirect\n[-1] Cancel"));
+                if(op == 0){
+                    this.respondToInquiry(toChange);
+                } else if (op == 1) {
+                    redirectInquiry(toChange);
+                } else if (op == -1) {
+                    //DO nothing, return
+                }else{
+                    this.view.displayError("Bad Number");
+                }
 
+            }catch(IndexOutOfBoundsException e){
+                this.view.displayInfo("Try again with a valid index");
+            }
+        }
     }
 
     public void redirectInquiry(Inquiry inquiry){
-
+        String assignedTo;
+        assignedTo = this.view.getInput("assignedToWho? enter email:");
+        inquiry.setAssignedTo(assignedTo);
+        String subject = "New Inquiry:"+inquiry.getSubject();
+        String content = inquiry.getContent();
+        this.emailService.sendEmail(((AuthenticatedUser)this.sharedContext.getCurrentUser()).getEmail(), assignedTo, subject, content);
     }
 }

@@ -59,7 +59,7 @@ public class TextUserInterface implements View {
 
     @Override
     public void displayFAQSection(FAQSection faqSection, Boolean includeQuestions) {
-        System.out.println("Topic: " + (faqSection.getTopic()==null?"root":faqSection.getTopic()));
+//        System.out.println("Topic: " + (faqSection.getTopic()==null?"root":faqSection.getTopic()));
 //        System.out.println(faqSection.getSuperTopics());
         if(faqSection.getTopic()!=null){
             System.out.print("SuperTopics ");
@@ -68,6 +68,7 @@ public class TextUserInterface implements View {
             }
             System.out.println();
         }
+        System.out.println("Topic: " + (faqSection.getTopic()==null?"root":faqSection.getTopic()));
         int index = 0;
         for(FAQSection subSection : faqSection.getSubSections()){
             System.out.println("-Subtopic [" + index + "]:" + subSection.getTopic());
@@ -82,7 +83,10 @@ public class TextUserInterface implements View {
 
     @Override
     public void displayInquiry(Inquiry inquiry){
-
+        System.out.print(":From: " + inquiry.getInquirerEmail());
+        System.out.print(":Subject: " + inquiry.getSubject());
+        System.out.print(":Content: " + inquiry.getContent());
+        System.out.println(":Assigned To: " + inquiry.getAssignedTo());
     }
 
     @Override

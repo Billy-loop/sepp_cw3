@@ -78,6 +78,23 @@ public class FAQSection {
         return null;
     }
 
+//    public ArrayList<String> getSuperTopics(){
+//        if (this.topic == null){ // at root
+//            return null;
+//        }else if(this.parent == null || this.parent.getTopic() == null){ // root as parent
+//            return new ArrayList<>(List.of("root"));
+//        }else if(this.parent != null){
+//            ArrayList<FAQSection> superSections = this.parent.getParent().getSubSections();
+//
+//            ArrayList<String> toReturn = new ArrayList<>();
+//            for (FAQSection superSection : superSections) {
+//                toReturn.add(superSection.getTopic());
+//            }
+//            return toReturn;
+//        }
+//        return null;
+//    }
+
     public ArrayList<FAQItem> findTopicItems(String target){
         if(this.topic!=null && this.topic.equals(target)){
             return this.faqItems;

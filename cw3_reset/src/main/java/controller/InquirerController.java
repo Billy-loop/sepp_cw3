@@ -21,7 +21,9 @@ public class InquirerController extends Controller{
         FAQSection currentSection = null;
         User currentUser = this.sharedContext.getCurrentUser();
         int optionNo = 0;
+
         while(!(currentSection==null && optionNo == -1)){
+            //Display option
             if (currentSection == null) {
                 FAQ faq = this.sharedContext.getFAQ();
                 currentSection = faq.getfaqSection();
@@ -30,11 +32,20 @@ public class InquirerController extends Controller{
             } else {
                 this.view.displayFAQSection(currentSection, currentUser instanceof Guest);
                 FAQSection parent = currentSection.getParent();
-                this.view.displayInfo(
-                        (parent == null)?"[-1] Return to All Topics":("[-1] Return to " + parent.getTopic())
-                );
+                if (parent == null){
+                    this.view.displayInfo("[-1] Return to main menu");
+                }
+                else if(parent.getTopic() == null){
+                    this.view.displayInfo("[-1] Return to All Topics");
+                }else{
+                    this.view.displayInfo("[-1] Return to " + parent.getTopic());
+                }
+//                this.view.displayInfo(
+//                        (parent == null)?"[-1] Return to All Topics":("[-1] Return to " + parent.getTopic())
+//                );
                 manageFAQSubscriptionOptions(currentSection, currentUser);
             }
+            //handle option
             optionNo = getUserOption();
             if (optionNo >= -1) {
                 currentSection = handleFAQNavigation(optionNo, currentSection);
@@ -142,6 +153,7 @@ public class InquirerController extends Controller{
         String query = this.view.getInput("Enter your search query");
         Collection<Page> availablePages = this.sharedContext.getPages();
         User currentUser = sharedContext.getCurrentUser();
+        //Guest can not see the private page, filter the private page.
         if(currentUser instanceof Guest){
             ArrayList<Page> publicPage = new ArrayList<Page>();
             for (Page page : availablePages){
@@ -169,6 +181,17 @@ public class InquirerController extends Controller{
     }
 
     public void contactStaff(){
-
+        String email, subject, content;
+        if(this.sharedContext.getCurrentUser() instanceof Guest){//Guest
+            email = this.view.getInput("Your Email:");
+            subject = this.view.getInput("Subject:");
+            content = this.view.getInput("Content:");
+        }else{
+            email = ((AuthenticatedUser)this.sharedContext.getCurrentUser()).getEmail();
+            subject = this.view.getInput("Subject:");
+            content = this.view.getInput("Content:");
+        }
+        this.sharedContext.getInquiries().add(new Inquiry(subject, content, email));// Add into inquiries.
+        this.emailService.sendEmail(email, SharedContext.ADMIN_STAFF_EMAIL, subject, content);
     }
 }

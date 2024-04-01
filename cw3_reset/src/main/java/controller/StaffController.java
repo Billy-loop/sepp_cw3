@@ -2,10 +2,12 @@ package controller;
 
 import external.AuthenticationService;
 import external.EmailService;
+import model.AuthenticatedUser;
 import model.Inquiry;
 import model.SharedContext;
 import view.View;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class StaffController extends Controller {
@@ -14,10 +16,23 @@ public class StaffController extends Controller {
     }
 
     protected Collection<String> getInquiryTitles(Collection<Inquiry> inquiries){
-        return null;
+        ArrayList<String> toReturn = new ArrayList<String>();
+        for(Inquiry inquiry : inquiries){
+            toReturn.add(inquiry.getSubject()+(inquiry.getAssignedTo()==null?"":"[Assigned]"));
+        }
+        return toReturn;
     }
 
     protected void respondToInquiry(Inquiry inquiry){
+        String respond = this.view.getInput("Enter Answer:");
+        inquiry.setContent(inquiry.getContent() + "\nAnswer: " + respond );
+        if (sharedContext.getCurrentUser() instanceof AuthenticatedUser){
+            this.emailService.sendEmail(((AuthenticatedUser)sharedContext.getCurrentUser()).getEmail(),
+                    inquiry.getInquirerEmail(),
+                    "Answer to "+inquiry.getSubject(), inquiry.getContent());
+        }
+
+        sharedContext.getInquiries().remove(inquiry);
 
     }
 }

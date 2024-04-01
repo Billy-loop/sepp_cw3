@@ -19,15 +19,17 @@ public class Controller {
         this.authenticationService = authenticationService;
         this.emailService = emailService;
     }
+/*
 
-    protected <T extends Enum<T>> int selectFromMenu(Collection<T> options, String instruction){
+ */
+    protected <T extends Enum<T>> int selectFromMenu(Collection<T> options, String fallback){
         int index = 0;
-        for (T option : options){
+        for (T option : options){//Iterate option in MenuOption
             this.view.displayInfo("[" + index +"]" + option);
             index++;
         }
-        this.view.displayInfo(instruction);
-        try{
+        this.view.displayInfo(fallback);
+        try{//Choose option
             int chosen = Integer.parseInt(this.view.getInput("Choose:"));
             if(chosen >= index){
                 this.view.displayInfo("Please Press Correct option");
