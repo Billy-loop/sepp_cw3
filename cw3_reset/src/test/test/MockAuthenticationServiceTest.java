@@ -28,7 +28,6 @@ public class MockAuthenticationServiceTest {
         random = new Random();
         users = (JSONArray) new JSONParser().parse(new FileReader(
                 "C:\\Users\\vasuv\\OneDrive\\Desktop\\JUnit_Task_3\\src\\main\\java\\external\\MockUserDataGroups4.json"));
-        System.out.println("F");
     }
 
     @DisplayName("Valid User Test")
