@@ -18,7 +18,7 @@ import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ConsultFAQSystemTest {
+public class ConsultFAQSystemTests {
     private MenuController controller;
     private TextUserInterface view;
     private MockAuthenticationService authService;

@@ -8,7 +8,7 @@ import external.MockAuthenticationService;
 import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import controller.GuestController;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -18,7 +18,7 @@ import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class LoginSystemTest {
+public class LoginSystemTests {
     private MenuController controller;
     private TextUserInterface view;
     private MockAuthenticationService authService;

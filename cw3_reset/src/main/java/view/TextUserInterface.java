@@ -58,7 +58,7 @@ public class TextUserInterface implements View {
     }
 
     @Override
-    public void displayFAQSection(FAQSection faqSection, Boolean includeQuestions) {
+    public void displayFAQSection(FAQSection faqSection, Boolean guest) {
 //        System.out.println("Topic: " + (faqSection.getTopic()==null?"root":faqSection.getTopic()));
 //        System.out.println(faqSection.getSuperTopics());
         if(faqSection.getTopic()!=null){
@@ -74,11 +74,11 @@ public class TextUserInterface implements View {
             System.out.println("-Subtopic [" + index + "]:" + subSection.getTopic());
             index ++;
         }
-        if(includeQuestions){
-            for(FAQItem faqItem : faqSection.getItems()){
-                System.out.println("--Q: " + faqItem.getQuestion() + "-A:" + faqItem.getAnswer());
-            }
+
+        for(FAQItem faqItem : faqSection.getItems()){
+            System.out.println("--Q: " + faqItem.getQuestion() + "-A:" + faqItem.getAnswer());
         }
+
     }
 
     @Override

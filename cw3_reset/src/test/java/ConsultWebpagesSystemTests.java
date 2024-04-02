@@ -2,7 +2,6 @@ import controller.MenuController;
 import external.MockAuthenticationService;
 import external.MockEmailService;
 import model.AuthenticatedUser;
-import model.Guest;
 import model.Page;
 import model.SharedContext;
 import org.json.simple.parser.ParseException;
@@ -15,14 +14,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class ConsultWebpagesSystemTest {
+public class ConsultWebpagesSystemTests {
     private MenuController controller;
     private TextUserInterface view;
     private MockAuthenticationService authService;
