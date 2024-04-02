@@ -15,7 +15,7 @@ import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ManageFAQPageSystemTest {
+public class ManageFAQPageSystemTests {
     private MenuController controller;
     private TextUserInterface view;
     private MockAuthenticationService authService;

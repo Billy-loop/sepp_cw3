@@ -18,6 +18,15 @@ public class AdminStaffController extends StaffController{
 
     }
 
+    /**
+     * Adds a new page to the system.
+     * This method prompts the user to input the title and path of the content file for the new page.
+     * It reads the content from the specified file path and creates a new page with the given title, content, and privacy status.
+     * If the page already exists, it prompts the user whether to overwrite it with the new page.
+     * After adding the new page, it sends an email notification to the admin staff.
+     *
+     * @throws IllegalArgumentException if the content file specified by the user is not found.
+     */
     public void addPage(){
         String title =this.view.getInput("Enter page title");
         String contentPath = this.view.getInput("Enter page path");
@@ -63,10 +72,18 @@ public class AdminStaffController extends StaffController{
             view.displayWarning("Added page" + title + "but failed to send email notification");
         }
     }
-/**
- *
- */
 
+    /**
+     * Manages FAQ section by allowing users to navigate through the FAQ structure,
+     * view FAQ items, and add new FAQ items.
+     * This method displays the current FAQ section, along with its subsections and FAQ items.
+     * It prompts the user to choose an option:
+     *   - Choose a subsection to navigate deeper into the FAQ structure.
+     *   - Choose -1 to return to the previous layer.
+     *   - Choose -2 to add a new Question-Answer (Q-A) pair to the current FAQ section.
+     *
+     * @throws NumberFormatException if the input provided by the user is not a valid integer.
+     */
     public void manageFAQ(){
         FAQSection currentFAQSection = this.sharedContext.getFAQ().getfaqSection();
 
@@ -76,7 +93,7 @@ public class AdminStaffController extends StaffController{
             this.view.displayInfo("[-2] to add Q-A pair");
 //            int op = Integer.parseInt(this.view.getInput("Navigate?"));
             int op = Integer.parseInt(this.view.getInput("Choose an option?"));
-            if(op == -1){ // return to previous layer / cancel
+            if(op == -1){ // return
                 if(currentFAQSection.getParent() != null){
                     currentFAQSection = currentFAQSection.getParent();
                     this.view.displayInfo("Parent topic");
@@ -94,18 +111,19 @@ public class AdminStaffController extends StaffController{
                     this.view.displayInfo("Try again with a valid index");
                 }
             }
-//            if(op == -2){ // Add Q-A
-//                addFAQItem(currentFAQSection);
-//            }
-//            try{
-//                currentFAQSection = currentFAQSection.getSubSections().get(op);
-//                this.view.displayInfo("Sub topic");
-//            }catch(IndexOutOfBoundsException e){
-//                this.view.displayInfo("Try again with a valid index");
-//            }
         }
     }
 
+    /**
+     * Adds a new FAQ item to the specified FAQ section.
+     * Prompts the user to input a question and an answer for the new FAQ item.
+     * If the FAQ section has a topic, it asks the user if they want to add the item to a new subtopic.
+     * If yes, it prompts the user for a new subtopic name and adds the item under that subtopic.
+     * If no, it adds the item directly to the FAQ section.
+     * If the FAQ section is the root, it prompts the user for a new subtopic name and adds the item under that subtopic.
+     *
+     * @param faqSection the FAQ section to which the new FAQ item will be added.
+     */
     public void addFAQItem(FAQSection faqSection){
         String question = this.view.getInput("Question:");
         String answer = this.view.getInput("Answer:");
@@ -157,6 +175,11 @@ public class AdminStaffController extends StaffController{
         }
     }
 
+    /**
+     * Displays information about all the pages stored in the shared context.
+     * If there are no pages, it informs the user that there are no pages.
+     * Otherwise, it iterates through each page and displays its title and content.
+     */
     public void viewAllPages(){
         if(this.sharedContext.getPages().isEmpty()){
             this.view.displayInfo("No Pages");
@@ -168,10 +191,11 @@ public class AdminStaffController extends StaffController{
     }
 
     /**
-     * Display option,
+     * Manages the inquiries by displaying unanswered inquiries, allowing the user to choose an inquiry to respond to or redirect.
+     * Displays a list of unanswered inquiries along with their titles, allowing the user to select one for further action.
+     * The user can choose to answer the inquiry themselves, redirect it, or cancel the operation.
      *
-     *
-     * @return the sum of {@code a} and {@code b}
+     * @throws NumberFormatException if the input provided by the user is not a valid integer.
      */
     public void manageInquiries(){
         this.view.displayInfo("Unanswered Inquires:");
@@ -204,6 +228,11 @@ public class AdminStaffController extends StaffController{
         }
     }
 
+    /**
+     * Redirects an inquiry to another user by assigning it to them and sending an email notification.
+     *
+     * @param inquiry The inquiry to be redirected.
+     */
     public void redirectInquiry(Inquiry inquiry){
         String assignedTo;
         assignedTo = this.view.getInput("assignedToWho? enter email:");

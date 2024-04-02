@@ -11,6 +11,10 @@ public class AuthenticatedUserController extends Controller{
         super(sharedContext, view, authenticationService, emailService);
     }
 
+    /**
+     * After logout, user will be a guest.
+     */
+
     public void logout(){
         this.sharedContext.setCurrentUser(new Guest());
     }

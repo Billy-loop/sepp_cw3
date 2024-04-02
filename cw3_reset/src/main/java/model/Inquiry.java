@@ -1,15 +1,18 @@
 package model;
-
+import java.time.LocalDateTime;
 public class Inquiry {
     private String inquirerEmail;
     private String subject;
     private String content;
     private String assignedTo;
+
+    private LocalDateTime time;
     public Inquiry(String subject, String content, String inquirerEmail){
         this.subject = subject;
         this.content = content;
         this.inquirerEmail = inquirerEmail;
         this.assignedTo = null;
+        this.time = LocalDateTime.now();
     }
     public String getInquirerEmail(){
         return this.inquirerEmail;
@@ -28,5 +31,9 @@ public class Inquiry {
     }
     public void setContent(String content){
         this.content = content;
+    }
+
+    public LocalDateTime getTime(){
+        return this.time;
     }
 }

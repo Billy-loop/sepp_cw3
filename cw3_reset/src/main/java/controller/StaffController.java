@@ -15,14 +15,31 @@ public class StaffController extends Controller {
         super(sharedContext, view, authenticationService, emailService);
     }
 
+    /**
+     * Retrieves the titles of inquiries from the given collection of inquiries.
+     * If an inquiry is assigned to a staff member, the title is suffixed with "[Assigned]".
+     *
+     * @param inquiries the collection of inquiries to extract titles from
+     * @return a collection of inquiry titles
+     */
     protected Collection<String> getInquiryTitles(Collection<Inquiry> inquiries){
-        ArrayList<String> toReturn = new ArrayList<String>();
+        ArrayList<String> titles = new ArrayList<String>();
         for(Inquiry inquiry : inquiries){
-            toReturn.add(inquiry.getSubject()+(inquiry.getAssignedTo()==null?"":"[Assigned]"));
+            if (inquiry.getAssignedTo() == null){
+                titles.add(inquiry.getSubject());
+            }else{
+                titles.add(inquiry.getSubject() + ":" + "[Assigned]");
+            }
         }
-        return toReturn;
+        return titles;
     }
 
+    /**
+     * Responds to an inquiry by adding the provided response to the inquiry's content.
+     * If the current user is authenticated, an email notification with the response is sent to the inquirer's email address.
+     *
+     * @param inquiry the inquiry to respond to
+     */
     protected void respondToInquiry(Inquiry inquiry){
         String respond = this.view.getInput("Enter Answer:");
         inquiry.setContent(inquiry.getContent() + "\nAnswer: " + respond );
@@ -33,6 +50,5 @@ public class StaffController extends Controller {
         }
 
         sharedContext.getInquiries().remove(inquiry);
-
     }
 }

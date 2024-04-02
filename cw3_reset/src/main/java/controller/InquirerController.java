@@ -17,6 +17,13 @@ public class InquirerController extends Controller{
 
     }
 
+    /**
+     * Allows the user to consult FAQ.
+     * Displays the FAQ sections and options for navigation and subscription.
+     * Handles user input for navigation within the FAQ sections and subscription options.
+     *
+     * @throws NumberFormatException if an invalid option number is entered
+     */
     public void consultFAQ(){
         FAQSection currentSection = null;
         User currentUser = this.sharedContext.getCurrentUser();
@@ -40,13 +47,18 @@ public class InquirerController extends Controller{
                 }else{
                     this.view.displayInfo("[-1] Return to " + parent.getTopic());
                 }
-//                this.view.displayInfo(
-//                        (parent == null)?"[-1] Return to All Topics":("[-1] Return to " + parent.getTopic())
-//                );
+
                 manageFAQSubscriptionOptions(currentSection, currentUser);
             }
             //handle option
-            optionNo = getUserOption();
+
+            try{
+                optionNo = Integer.parseInt(this.view.getInput("Please choose an option"));
+            }catch (NumberFormatException e){
+                this.view.displayException(e);
+                optionNo = Integer.MAX_VALUE;
+            }
+
             if (optionNo >= -1) {
                 currentSection = handleFAQNavigation(optionNo, currentSection);
             } else if (optionNo == -2 || optionNo == -3){
@@ -58,6 +70,14 @@ public class InquirerController extends Controller{
         }
     }
 
+    /**
+     * Manages the subscription options for the current FAQ section based on the current user's type.
+     * If the current user is authenticated, displays an option to either stop or request updates for the FAQ topic.
+     * If the current user is a guest, displays options to request or stop receiving updates for the FAQ topic.
+     *
+     * @param currentSection the current FAQ section being viewed
+     * @param currentUser the current user (either authenticated or guest)
+     */
     private void manageFAQSubscriptionOptions(FAQSection currentSection, User currentUser){
         if(currentUser instanceof AuthenticatedUser){
             String topic = currentSection.getTopic();
@@ -73,15 +93,15 @@ public class InquirerController extends Controller{
         }
     }
 
-    private int getUserOption(){
-        try{
-            return Integer.parseInt(this.view.getInput("Please choose an option"));
-        }catch(NumberFormatException e){
-            this.view.displayException(e);
-            return Integer.MAX_VALUE;
-        }
-    }
-
+    /**
+     * Handles navigation within the FAQ section based on the provided option number and current FAQ section.
+     * If the option number is -1, it returns the parent section if available.
+     * Otherwise, it navigates to the subsection corresponding to the option number.
+     *
+     * @param optionNo the option number representing the user's choice
+     * @param currentSection the current FAQ section the user is navigating within
+     * @return the FAQ section to navigate to, or null if no valid navigation occurred
+     */
     private FAQSection handleFAQNavigation(int optionNo, FAQSection currentSection) {
         if (optionNo == -1) {
             if(currentSection.getTopic() != null){
@@ -102,6 +122,16 @@ public class InquirerController extends Controller{
         }
     }
 
+
+    /**
+     * Handles subscription updates based on the provided option number, current FAQ section, and current user.
+     * If the current user is authenticated, it either subscribes or unsubscribes the user from updates on the current FAQ section topic.
+     * If the current user is a guest, it subscribes or unsubscribes the user based on the provided option.
+     *
+     * @param optionNo the option number representing the user's choice (-2 for subscribe, -3 for unsubscribe)
+     * @param currentSection the current FAQ section the user is viewing
+     * @param currentUser the current user (either authenticated or guest)
+     */
     private void handleSubscriptionUpdates(int optionNo, FAQSection currentSection, User currentUser){
         if(currentUser instanceof AuthenticatedUser){
             String topic = currentSection != null ? currentSection.getTopic() : null;
@@ -124,6 +154,16 @@ public class InquirerController extends Controller{
             }
         }
     }
+
+    /**
+     * Requests to receive updates for a specific FAQ topic for a given email address.
+     * If the email address is null, prompts the user to input their email address.
+     * Attempts to register the email address for updates on the specified FAQ topic.
+     * Displays a success message if registration is successful, otherwise displays an error message.
+     *
+     * @param email the email address to register for updates (if Guest, prompts the user to input)
+     * @param topic the FAQ topic to request updates for
+     */
     private void requestFAQUpdates(String email, String topic){
         if(email == null){
             email = this.view.getInput("Please enter your email address");
@@ -132,10 +172,19 @@ public class InquirerController extends Controller{
         if(success){
             this.view.displaySuccess("Successfully registered " + email + " for updates on " + topic);
         }else{
-            this.view.displayFailure("Failed to register " + email + " for updates on " + topic + " Perhaps this email was already registered?");
+            this.view.displayError("Failed to register " + email + " for updates on " + topic + " Perhaps this email was already registered?");
         }
     }
 
+    /**
+     * Stops receiving updates for a specific FAQ topic for a given email address.
+     * If the email address is null, prompts the user to input their email address.
+     * Attempts to unregister the email address for updates on the specified FAQ topic.
+     * Displays a success message if unregistration is successful, otherwise displays an error message.
+     *
+     * @param email the email address to unregister for updates (if null, prompts the user to input)
+     * @param topic the FAQ topic to stop receiving updates for
+     */
     private void stopFAQUpdates(String email , String topic){
         if(email == null){
             email = this.view.getInput("Please enter your email address");
@@ -144,11 +193,20 @@ public class InquirerController extends Controller{
         if(success){
             this.view.displaySuccess("Successfully unregistered " + email + " for updates on " + topic + "");
         }else{
-            this.view.displayFailure("Failed to unregister " + email + " for updates on " + topic + " Perhaps this email was not registered?");
+            this.view.displayError("Failed to unregister " + email + " for updates on " + topic + " Perhaps this email was not registered?");
         }
     }
 
 
+    /**
+     * Allows the user to search for pages based on a query.
+     * Retrieves the search query from the user and searches for matching pages.
+     * Filters out private pages if the current user is a guest.
+     * Displays up to 4 search results to the user.
+     *
+     * @throws IOException if an I/O error occurs while searching for pages
+     * @throws ParseException if an error occurs while parsing search results
+     */
     public void searchPages(){
         String query = this.view.getInput("Enter your search query");
         Collection<Page> availablePages = this.sharedContext.getPages();
@@ -164,6 +222,7 @@ public class InquirerController extends Controller{
             availablePages = publicPage;
         }
         try{
+            // Perform the search and limit the results to a maximum of 4
             PageSearch pageSearch = new PageSearch(availablePages);
             ArrayList<PageSearchResult> res = (ArrayList<PageSearchResult>) pageSearch.search(query);
             if(res.size()>4){
@@ -180,8 +239,16 @@ public class InquirerController extends Controller{
         }
     }
 
+    /**
+     * Allows the user to contact staff members.
+     * Retrieves the user's email address if they are a guest; otherwise, uses the email address of the authenticated user.
+     * Prompts the user to input the subject and content of the inquiry.
+     * Adds the inquiry to the list of inquiries in the shared context.
+     * Sends an email notification to the staff members.
+     */
     public void contactStaff(){
         String email, subject, content;
+        // If the current user is a guest, prompt for their email address;
         if(this.sharedContext.getCurrentUser() instanceof Guest){//Guest
             email = this.view.getInput("Your Email:");
         }else{

@@ -1,7 +1,5 @@
 package model;
 
-import java.util.Map;
-
 
 public class FAQ {
     /**
@@ -11,6 +9,8 @@ public class FAQ {
     public FAQ(){
         this.faqSection = new FAQSection();
     }
+
+    public FAQSection addFAQsection(FAQSection section){return null;}
 
     public FAQSection getfaqSection(){
         return this.faqSection;

@@ -43,6 +43,12 @@ public class FAQSection {
     public ArrayList<FAQSection> getSubSections(){
         return this.subSections;
     }
+
+    /**
+     * Retrieves the topics of all subsections belonging to this FAQSection.
+     *
+     * @return an ArrayList containing the topics of all subsections
+     */
     public ArrayList<String> getAllSubTopics(){
         ArrayList<String> subSectionsNames = new ArrayList<>();
         for(FAQSection subSection:this.subSections){
@@ -50,6 +56,13 @@ public class FAQSection {
         }
         return subSectionsNames;
     }
+
+    /**
+     * Retrieves the subsection with the specified topic from the list of subsections belonging to this FAQSection.
+     *
+     * @param topic the topic of the subsection to retrieve
+     * @return the subsection with the specified topic, or null if no such subsection exists
+     */
     public FAQSection getSubSectionWithTopic(String topic){
         for(FAQSection subSection:this.subSections){
             if(subSection.getTopic().equals(topic)){
@@ -61,6 +74,15 @@ public class FAQSection {
     public FAQSection getParent() {
         return this.parent;
     }
+
+    /**
+     * Retrieves the topics of super-sections (sections that contain this section) for the current FAQSection.
+     * If this section is at the root, returns null.
+     * If this section has no parent or the parent is the root, returns a list containing "root".
+     * Otherwise, returns the topics of all super-sections.
+     *
+     * @return an ArrayList containing the topics of super-sections, or null if at root
+     */
     public ArrayList<String> getSuperTopics(){
         if (this.topic == null){ // at root
             return null;
@@ -78,23 +100,12 @@ public class FAQSection {
         return null;
     }
 
-//    public ArrayList<String> getSuperTopics(){
-//        if (this.topic == null){ // at root
-//            return null;
-//        }else if(this.parent == null || this.parent.getTopic() == null){ // root as parent
-//            return new ArrayList<>(List.of("root"));
-//        }else if(this.parent != null){
-//            ArrayList<FAQSection> superSections = this.parent.getParent().getSubSections();
-//
-//            ArrayList<String> toReturn = new ArrayList<>();
-//            for (FAQSection superSection : superSections) {
-//                toReturn.add(superSection.getTopic());
-//            }
-//            return toReturn;
-//        }
-//        return null;
-//    }
-
+    /**
+     * Finds FAQ items with the specified target topic within this FAQSection or its sub-sections.
+     *
+     * @param target the topic to search for
+     * @return an ArrayList containing the FAQ items with the specified topic, or null if not found
+     */
     public ArrayList<FAQItem> findTopicItems(String target){
         if(this.topic!=null && this.topic.equals(target)){
             return this.faqItems;
@@ -108,6 +119,13 @@ public class FAQSection {
         }
         return toReturn;
     }
+
+    /**
+     * Retrieves and formats FAQ items with the specified target topic within this FAQSection or its subsections.
+     *
+     * @param target the topic to search for
+     * @return a formatted string containing the FAQ items with the specified topic, or an empty string if not found
+     */
     public String printTopicItems(String target) {
         Collection<FAQItem> toPrints = this.findTopicItems(target);
         String toReturn = "";

@@ -15,6 +15,16 @@ public class GuestController extends Controller {
         super(sharedContext, view, authenticationService, emailService);
     }
 
+    /**
+     * Logs in the user by authenticating their credentials.
+     * Prompts the user to input their username and password.
+     * Sends the username and password to the authentication service for verification.
+     * If the authentication service returns an error, displays the error message and indicates login failure.
+     * If authentication is successful, parses the response containing user information,
+     * sets the current user in the shared context to the authenticated user, and displays a success message.
+     *
+     * @throws ParseException if an error occurs during parsing of the authentication response
+     */
     public void login() {
         String username = view.getInput("Enter your username: ");
         String password = view.getInput("Enter your password: ");

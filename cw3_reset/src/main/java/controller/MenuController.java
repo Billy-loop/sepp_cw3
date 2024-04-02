@@ -14,13 +14,14 @@ public class MenuController extends Controller{
     public MenuController(SharedContext sharedContext, View view, AuthenticationService authenticationService, EmailService emailService){
         super(sharedContext,view,authenticationService,emailService);
     }
-/*
- *
- */
 
+    /**
+     * Displays the main menu options based on the role of the current user.
+     * If the current user is a guest, displays the welcome message and handles the guest main menu.
+     * If the login is successful, navigates to the appropriate main menu based on the user's role (TeachingStaff, AdminStaff, or Student).
+     * If the current user is already authenticated, directly navigates to the main menu based on their role.
+     */
     public void mainMenu(){
-//        this.view.displayInfo("Welcome");
-//        this.view.displayDivider();
         if(this.sharedContext.getCurrentUser() instanceof Guest){
             this.view.displayInfo("Welcome");
             if(handleGuestMainMenu()){ // login success
@@ -57,6 +58,13 @@ public class MenuController extends Controller{
         mainMenu();
     }
 
+    /**
+     * Handles the main menu options for guest users.
+     * Displays the guest main menu options and performs actions based on the user's choice.
+     * Options include login, consulting FAQ, searching pages, and contacting staff.
+     *
+     * @return true if the user successfully logs in, false otherwise
+     */
     private boolean handleGuestMainMenu(){
         GuestController guest = new GuestController(this.sharedContext, this.view, this.authenticationService, this.emailService);
         InquirerController inquirer = new InquirerController(this.sharedContext, this.view, this.authenticationService, this.emailService);
@@ -82,6 +90,13 @@ public class MenuController extends Controller{
         return false;
     }
 
+    /**
+     * Handles the main menu options for student users.
+     * Displays the student main menu options and performs actions based on the user's choice.
+     * Options include logout, consulting FAQ, contacting staff, and searching pages.
+     *
+     * @return true if the user successfully logs out and becomes a guest, false otherwise
+     */
     private boolean handleStudentMainMenu() {
         InquirerController inquirer = new InquirerController(this.sharedContext, this.view, this.authenticationService, this.emailService);
         AuthenticatedUserController student = new AuthenticatedUserController(this.sharedContext, this.view, this.authenticationService, this.emailService);
@@ -113,6 +128,14 @@ public class MenuController extends Controller{
         }
         return false;
     }
+
+    /**
+     * Handles the main menu options for teaching staff users.
+     * Displays the teaching staff main menu options and performs actions based on the user's choice.
+     * Options include logout and managing received inquiries.
+     *
+     * @return true if the user successfully logs out and becomes a guest, false otherwise
+     */
     private boolean handleTeachingStaffMainMenu(){
         TeachingStaffController teacher = new TeachingStaffController(this.sharedContext,this.view,this.authenticationService,this.emailService);
         AuthenticatedUserController teacherUser = new AuthenticatedUserController(this.sharedContext,this.view,this.authenticationService,this.emailService);
@@ -141,6 +164,13 @@ public class MenuController extends Controller{
         return false;
     }
 
+    /**
+     * Handles the main menu options for admin staff users.
+     * Displays the admin staff main menu options and performs actions based on the user's choice.
+     * Options include logout, adding a page, managing FAQ, managing inquiries, and viewing all pages.
+     *
+     * @return true if the user successfully logs out and becomes a guest, false otherwise
+     */
     private boolean handleAdminStaffMainMenu(){
         AuthenticatedUserController adminStaffUser = new AuthenticatedUserController(this.sharedContext,this.view,this.authenticationService,this.emailService);
         AdminStaffController adminstaff = new AdminStaffController(this.sharedContext,this.view,this.authenticationService,this.emailService);

@@ -39,12 +39,29 @@ public class PageSearch {
         }iwriter.close();
     }
 
+    /**
+     * Adds a document to the index.
+     *
+     * @param writer  the IndexWriter instance to use for adding the document
+     * @param title   the title of the document
+     * @param content the content of the document
+     * @throws IOException if an I/O error occurs while adding the document to the index
+     */
     public void addDoc(IndexWriter writer, String title, String content) throws IOException {
         Document doc = new Document();
         doc.add(new Field("Title" , title, TextField.TYPE_STORED));
         doc.add(new Field("Content" , content,TextField.TYPE_STORED));
         writer.addDocument(doc);
     }
+
+    /**
+     * Searches for pages containing the specified question in their titles or content.
+     *
+     * @param question the question to search for
+     * @return a collection of PageSearchResult objects containing search results
+     * @throws IOException    if an I/O error occurs during the search process
+     * @throws ParseException if a parsing error occurs while parsing the query
+     */
     public Collection<PageSearchResult> search(String question) throws IOException, ParseException {
         //Search the index
         DirectoryReader ireader = DirectoryReader.open(this.index);
@@ -64,7 +81,6 @@ public class PageSearch {
         hits.addAll(new ArrayList<ScoreDoc>(List.of(hitContent)));
 
         // Iterate through the results:
-
         StoredFields storedFields = isearcher.storedFields();
         Collection<PageSearchResult> res = new ArrayList<PageSearchResult>();
         for (ScoreDoc hit : hits) {

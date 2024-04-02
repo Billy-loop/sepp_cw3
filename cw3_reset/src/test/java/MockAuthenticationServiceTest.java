@@ -9,7 +9,11 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import java.io.File;
+import java.net.URL;
+import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.Random;
 import external.MockAuthenticationService;
 
@@ -26,8 +30,10 @@ public class MockAuthenticationServiceTest {
     public void setUp() throws URISyntaxException, IOException, ParseException {
         authenticationService = new MockAuthenticationService();
         random = new Random();
-        users = (JSONArray) new JSONParser().parse(new FileReader(
-                "C:\\Users\\GGggg\\Documents\\sepp_cw3\\cw3_reset\\src\\main\\resources\\MockUserDataGroups4.json"));
+        URL dataPath = getClass().getResource("/MockUserDataGroups4.json");
+        Objects.requireNonNull(dataPath);
+        File dataFile = Paths.get(dataPath.toURI()).toFile();
+        users = (JSONArray) new JSONParser().parse(new FileReader(dataFile));
     }
 
     @DisplayName("Valid User Test")

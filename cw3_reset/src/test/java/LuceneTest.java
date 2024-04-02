@@ -19,7 +19,6 @@ import java.nio.file.Path;
 import java.nio.file.Files;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.util.IOUtils;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

@@ -87,6 +87,7 @@ public class TextUserInterface implements View {
         System.out.print(":Subject: " + inquiry.getSubject());
         System.out.print(":Content: " + inquiry.getContent());
         System.out.println(":Assigned To: " + inquiry.getAssignedTo());
+        System.out.println("Created At: " + inquiry.getTime().toString());
     }
 
     @Override
@@ -97,6 +98,6 @@ public class TextUserInterface implements View {
         }
     }
 
-    @Override
-    public void displayFailure(String fail){System.out.println(fail);}
+//    @Override
+//    public void displayFailure(String fail){System.out.println(fail);}
 }
