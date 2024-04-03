@@ -251,6 +251,7 @@ public class InquirerController extends Controller{
         // If the current user is a guest, prompt for their email address;
         if(this.sharedContext.getCurrentUser() instanceof Guest){//Guest
             email = this.view.getInput("Your Email:");
+
         }else{
             email = ((AuthenticatedUser)this.sharedContext.getCurrentUser()).getEmail();
         }

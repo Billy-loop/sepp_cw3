@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-public class PageSearchJunitTest {
+public class TestPageSearch {
     private PageSearch pageSearch;
     private ArrayList<Page> pages;
 

@@ -21,7 +21,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-public class MockAuthenticationServiceTest {
+public class TestMockAuthenticationService {
     private MockAuthenticationService authenticationService;
     private JSONArray users;
     private Random random;

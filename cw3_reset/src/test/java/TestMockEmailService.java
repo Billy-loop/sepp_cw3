@@ -6,7 +6,7 @@ import org.junit.jupiter.api.RepeatedTest;
 
 import external.MockEmailService;
 
-public class MockEmailServiceTest {
+public class TestMockEmailService {
     MockEmailService emailService;
 
     @BeforeEach

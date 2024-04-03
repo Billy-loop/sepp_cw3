@@ -322,13 +322,10 @@ public class ManageFAQPageSystemTests {
         System.out.println("Temporary file created at: " + tempFile.getAbsolutePath());
         tempFile.delete();
 
-//        assertEquals("Welcome", outputStream.toString());
         assertTrue(outputStream.toString().contains("Email from jack.tr@hindenburg.ac.uk to jack.tr@hindenburg.ac.uk"));
         assertTrue(outputStream.toString().contains("TestTitle"));
         assertTrue(outputStream.toString().contains("Test1Test2"));
-//        assertTrue(outputStream.toString().contains("Email from jack.tr@hindenburg.ac.uk to jack.tr@hindenburg.ac.uk\n" +
-//                "TestTitle\n" +
-//                "Test1Test2"));
+
         assertNotNull(sharedContext.getCurrentUser());
     }
     /**
@@ -375,7 +372,7 @@ public class ManageFAQPageSystemTests {
         System.out.println("Temporary file created at: " + tempFile.getAbsolutePath());
         tempFile.delete();
 
-
+        assertTrue(outputStream.toString().contains("PageTest1already exists Overwrite with new page?"));
         assertTrue(outputStream.toString().contains("Email from jack.tr@hindenburg.ac.uk to jack.tr@hindenburg.ac.uk"));
         assertTrue(outputStream.toString().contains("Test1"));
         assertTrue(outputStream.toString().contains("Test1Test2"));

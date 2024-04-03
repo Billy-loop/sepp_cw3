@@ -54,11 +54,7 @@ public class LoginSystemTests {
         }
 
         assertTrue(outputStream.toString().contains("Welcome"));
-//        assertTrue(outputStream.toString().contains("[0] to LOGIN\n" +
-//                "[1] to CONSULT_FAQ\n" +
-//                "[2] to SEARCH_PAGES\n" +
-//                "[3] to CONTACT_STAFF\n" +
-//                "[-1] Return to welcome page"));
+
         assertTrue(outputStream.toString().contains("Guest"));
         assertTrue(outputStream.toString().contains("[0]LOGIN"));
         assertTrue(outputStream.toString().contains( "[1]CONSULT_FAQ"));
