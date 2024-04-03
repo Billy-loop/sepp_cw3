@@ -192,4 +192,24 @@ public class InquirerController extends Controller{
         boolean success = this.sharedContext.unregisterForFAQUpdates(email, topic);
 
     }
+
+    public void contactStaff(){
+        String email, subject, content;
+
+        if(this.sharedContext.getCurrentUser() instanceof Guest){
+            email = this.view.getInput("Your Email: ");
+        }else{
+            email = ((AuthenticatedUser)this.sharedContext.getCurrentUser()).getEmail();
+        }
+        subject = this.view.getInput("Subject: ");
+        content = this.view.getInput("Content: ");
+
+        int sentEmailStatus = this.emailService.sendEmail(email, SharedContext.ADMIN_STAFF_EMAIL, subject, content);
+        if(sentEmailStatus == 0) {
+            this.sharedContext.getInquiries().add(new Inquiry(subject, content, email));// Add into inquiries.
+        }
+        else if(sentEmailStatus == 1){
+            view.displayInfo("\n====Incorrect Email Address Provided=====\n");
+        }
+    }
 }
